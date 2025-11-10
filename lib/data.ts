@@ -245,14 +245,238 @@ export const storeGallery = [
   },
 ]
 
-// Declare variables to fix undeclared errors
-const newsArticles = [] // Placeholder for news articles
+export const articles = [
+  // Page 1
+  {
+    id: "1",
+    title: "5 Tanda Baterai HP Anda Sudah Harus Diganti",
+    slug: "5-tanda-baterai-hp-harus-diganti",
+    category: "Tips & Trik",
+    date: "20 Mei 2024",
+    excerpt:
+      "Baterai HP yang sudah lemah dapat mengganggu aktivitas sehari-hari. Kenali tanda-tandanya agar tidak terlambat menggantinya dan terhindar dari kerusakan lebih parah.",
+  },
+  {
+    id: "2",
+    title: "Cara Merawat Layar HP Agar Tidak Cepat Rusak",
+    slug: "cara-merawat-layar-hp-agar-awet",
+    category: "Tips & Trik",
+    date: "18 Mei 2024",
+    excerpt:
+      "Layar adalah komponen HP yang paling rentan rusak. Simak tips perawatan layar HP yang benar agar tetap jernih dan awet dalam jangka panjang.",
+  },
+  {
+    id: "3",
+    title: "Promo Spesial Service HP Gratis Biaya Cek",
+    slug: "promo-service-hp-gratis-biaya-cek",
+    category: "Promo Spesial",
+    date: "15 Mei 2024",
+    excerpt:
+      "Dapatkan layanan cek kondisi HP gratis di bulan ini! Cukup bawa HP Anda ke toko kami, kami akan mengecek kerusakan tanpa biaya apapun.",
+  },
+  // Page 2
+  {
+    id: "4",
+    title: "Kenapa HP Sering Panas? Ini Penyebab dan Solusinya",
+    slug: "kenapa-hp-sering-panas-penyebab-solusi",
+    category: "Tips & Trik",
+    date: "13 Mei 2024",
+    excerpt:
+      "HP yang cepat panas bisa jadi tanda masalah serius. Pelajari penyebab utama HP overheat dan cara mengatasinya sebelum merusak komponen lainnya.",
+  },
+  {
+    id: "5",
+    title: "Layanan Express Service: Perbaikan HP dalam 2 Jam",
+    slug: "layanan-express-service-2-jam",
+    category: "Info Layanan",
+    date: "11 Mei 2024",
+    excerpt:
+      "Butuh HP cepat kembali? Kini kami menyediakan layanan express service untuk kerusakan ringan hingga sedang dengan garansi hasil perbaikan.",
+  },
+  {
+    id: "6",
+    title: "Tips Membersihkan Port Charging HP yang Kotor",
+    slug: "tips-membersihkan-port-charging-hp",
+    category: "Tips & Trik",
+    date: "9 Mei 2024",
+    excerpt:
+      "Port charging yang kotor dapat menyebabkan HP sulit di-charge. Ikuti cara aman membersihkan port charging tanpa merusak komponen di dalamnya.",
+  },
+  // Page 3
+  {
+    id: "7",
+    title: "Diskon 20% untuk Service Laptop Semua Merek",
+    slug: "diskon-20-persen-service-laptop",
+    category: "Promo Spesial",
+    date: "7 Mei 2024",
+    excerpt:
+      "Laptop lemot atau rusak? Manfaatkan promo diskon 20% untuk semua jenis service laptop dari mulai cleaning, install ulang, hingga ganti komponen.",
+  },
+  {
+    id: "8",
+    title: "Cara Backup Data Sebelum Service HP",
+    slug: "cara-backup-data-sebelum-service",
+    category: "Tips & Trik",
+    date: "5 Mei 2024",
+    excerpt:
+      "Pastikan data Anda aman sebelum melakukan service HP. Pelajari cara backup yang mudah dan aman agar tidak kehilangan foto, kontak, dan file penting.",
+  },
+  {
+    id: "9",
+    title: "Teknisi Bersertifikat Resmi Siap Melayani Anda",
+    slug: "teknisi-bersertifikat-resmi",
+    category: "Info Layanan",
+    date: "3 Mei 2024",
+    excerpt:
+      "Tim teknisi kami telah tersertifikasi dan berpengalaman lebih dari 15 tahun dalam menangani berbagai kerusakan elektronik dengan standar profesional.",
+  },
+  // Page 4
+  {
+    id: "10",
+    title: "Penyebab HP Mati Total dan Cara Mengatasinya",
+    slug: "penyebab-hp-mati-total-dan-solusi",
+    category: "Tips & Trik",
+    date: "1 Mei 2024",
+    excerpt:
+      "HP mati total bisa disebabkan berbagai hal mulai dari masalah baterai, IC power, hingga motherboard. Ketahui penyebab dan estimasi biaya perbaikannya.",
+  },
+  {
+    id: "11",
+    title: "Garansi Resmi untuk Semua Jenis Perbaikan",
+    slug: "garansi-resmi-semua-perbaikan",
+    category: "Info Layanan",
+    date: "29 April 2024",
+    excerpt:
+      "Kami memberikan garansi resmi untuk setiap perbaikan yang kami lakukan. Jika masalah yang sama muncul lagi, kami akan perbaiki tanpa biaya tambahan.",
+  },
+  {
+    id: "12",
+    title: "Cara Memperpanjang Usia Baterai HP Anda",
+    slug: "cara-memperpanjang-usia-baterai-hp",
+    category: "Tips & Trik",
+    date: "27 April 2024",
+    excerpt:
+      "Baterai HP bisa awet hingga 3-4 tahun jika dirawat dengan benar. Simak kebiasaan charging yang tepat dan tips mengoptimalkan kesehatan baterai HP Anda.",
+  },
+  // Page 5
+  {
+    id: "13",
+    title: "Beli 2 Gratis 1: Promo Aksesoris HP Pilihan",
+    slug: "beli-2-gratis-1-aksesoris-hp",
+    category: "Promo Spesial",
+    date: "25 April 2024",
+    excerpt:
+      "Lengkapi HP Anda dengan aksesoris berkualitas! Dapatkan promo beli 2 gratis 1 untuk produk pilihan seperti casing, tempered glass, dan charger.",
+  },
+  {
+    id: "14",
+    title: "Mengatasi HP Lemot: Software vs Hardware",
+    slug: "mengatasi-hp-lemot-software-hardware",
+    category: "Tips & Trik",
+    date: "23 April 2024",
+    excerpt:
+      "HP lemot bisa karena masalah software atau hardware. Pelajari cara membedakannya dan solusi tepat untuk membuat HP kembali ngebut seperti baru.",
+  },
+  {
+    id: "15",
+    title: "Kini Melayani Service TV LED Semua Merek",
+    slug: "melayani-service-tv-led-semua-merek",
+    category: "Info Layanan",
+    date: "21 April 2024",
+    excerpt:
+      "Layanan kami kini diperluas untuk service TV LED berbagai merek. Dari masalah gambar, suara, hingga kerusakan panel, kami siap membantu Anda.",
+  },
+  // Page 6
+  {
+    id: "16",
+    title: "Bahaya Menggunakan Charger Tidak Original",
+    slug: "bahaya-charger-tidak-original",
+    category: "Tips & Trik",
+    date: "19 April 2024",
+    excerpt:
+      "Charger palsu atau tidak original dapat merusak baterai dan komponen HP lainnya. Ketahui risiko dan cara memilih charger yang aman untuk HP Anda.",
+  },
+  {
+    id: "17",
+    title: "Cara Mengatasi Touchscreen HP yang Error",
+    slug: "cara-mengatasi-touchscreen-error",
+    category: "Tips & Trik",
+    date: "17 April 2024",
+    excerpt:
+      "Layar sentuh yang tidak responsif atau bergerak sendiri sangat mengganggu. Coba beberapa cara ini sebelum memutuskan untuk ganti LCD HP Anda.",
+  },
+  {
+    id: "18",
+    title: "Promo Cashback 50rb untuk Service di Atas 200rb",
+    slug: "promo-cashback-50rb-service",
+    category: "Promo Spesial",
+    date: "15 April 2024",
+    excerpt:
+      "Service HP atau laptop dengan biaya di atas Rp 200.000 akan mendapat cashback Rp 50.000 yang bisa digunakan untuk service berikutnya. Buruan manfaatkan!",
+  },
+  // Page 7
+  {
+    id: "19",
+    title: "Tips Merawat Laptop Agar Tetap Awet",
+    slug: "tips-merawat-laptop-agar-awet",
+    category: "Tips & Trik",
+    date: "13 April 2024",
+    excerpt:
+      "Laptop adalah investasi yang tidak murah. Pelajari cara merawat laptop dengan benar mulai dari cleaning, suhu, hingga kebiasaan penggunaan yang tepat.",
+  },
+  {
+    id: "20",
+    title: "Kini Tersedia Layanan Antar Jemput Service",
+    slug: "layanan-antar-jemput-service",
+    category: "Info Layanan",
+    date: "11 April 2024",
+    excerpt:
+      "Tidak sempat datang ke toko? Tenang, kini kami menyediakan layanan antar jemput untuk service HP, laptop, dan elektronik lainnya di area Purworejo.",
+  },
+  {
+    id: "21",
+    title: "Penyebab Speaker HP Tidak Bunyi dan Solusinya",
+    slug: "penyebab-speaker-hp-tidak-bunyi",
+    category: "Tips & Trik",
+    date: "9 April 2024",
+    excerpt:
+      "Speaker HP bermasalah bisa karena debu, air, atau kerusakan komponen. Simak penyebab umum dan langkah awal yang bisa Anda lakukan sendiri di rumah.",
+  },
+  // Page 8
+  {
+    id: "22",
+    title: "Panduan Lengkap Memilih HP Bekas Berkualitas",
+    slug: "panduan-memilih-hp-bekas-berkualitas",
+    category: "Tips & Trik",
+    date: "7 April 2024",
+    excerpt:
+      "Ingin beli HP second? Pelajari cara cek kondisi HP bekas agar tidak tertipu. Dari fisik, software, hingga komponen internal yang harus dicek sebelum beli.",
+  },
+  {
+    id: "23",
+    title: "Gratis Cleaning dan Cek Kesehatan Laptop",
+    slug: "gratis-cleaning-cek-kesehatan-laptop",
+    category: "Promo Spesial",
+    date: "5 April 2024",
+    excerpt:
+      "Khusus bulan ini, dapatkan layanan cleaning laptop dan pengecekan kesehatan komponen secara gratis. Pastikan laptop Anda dalam kondisi prima untuk bekerja.",
+  },
+  {
+    id: "24",
+    title: "Cara Mengatasi HP yang Sering Restart Sendiri",
+    slug: "cara-mengatasi-hp-restart-sendiri",
+    category: "Tips & Trik",
+    date: "3 April 2024",
+    excerpt:
+      "HP yang sering restart sendiri bisa sangat mengganggu. Ketahui penyebabnya mulai dari aplikasi bermasalah, sistem error, hingga kerusakan hardware.",
+  },
+]
+
 const priceList = {
   hp: [], // Placeholder for HP pricing
   laptop: [], // Placeholder for Laptop pricing
 }
 
 // Export aliases for backward compatibility
-export const articles = newsArticles
 export const pricingHandphone = priceList.hp
 export const pricingLaptop = priceList.laptop
