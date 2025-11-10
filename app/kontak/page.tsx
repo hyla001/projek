@@ -1,31 +1,70 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { contactInfo } from "@/lib/data"
-import { MapPin, Phone, MessageCircle, Mail, Clock, Facebook, Instagram } from "lucide-react"
+import { MapPin, Phone, MessageCircle, Mail, Clock, Facebook, Instagram, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { contactFormSchema, type ContactFormData } from "@/lib/validations/contact"
+import { toast } from "sonner"
+import { useState } from "react"
 
 export default function KontakPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Kirim ke WhatsApp
-    const message = `Halo, saya ${formData.name}.\n\nEmail: ${formData.email}\nTelepon: ${formData.phone}\n\nPesan: ${formData.message}`
-    const whatsappUrl = `https://wa.me/6281243049073?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, "_blank")
+  const onSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        toast.success("Pesan berhasil dikirim!", {
+          description: "Terima kasih telah menghubungi kami. Kami akan segera merespons.",
+        })
+        reset()
+
+        // Optional: Also send to WhatsApp
+        const message = `Halo, saya ${data.name}.\n\nEmail: ${data.email}\nTelepon: ${data.phone}\n\nPesan: ${data.message}`
+        const whatsappUrl = `https://wa.me/6281243049073?text=${encodeURIComponent(message)}`
+        setTimeout(() => {
+          window.open(whatsappUrl, "_blank")
+        }, 1000)
+      } else {
+        toast.error("Gagal mengirim pesan", {
+          description: result.message || "Terjadi kesalahan. Silakan coba lagi.",
+        })
+      }
+    } catch (error) {
+      console.error("Form submission error:", error)
+      toast.error("Gagal mengirim pesan", {
+        description: "Terjadi kesalahan koneksi. Silakan coba lagi.",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -47,17 +86,16 @@ export default function KontakPage() {
                 <CardTitle className="text-2xl">Kirim Pesan</CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="name">Nama Lengkap</Label>
                     <Input
                       id="name"
                       placeholder="Masukkan nama lengkap Anda"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      required
+                      {...register("name")}
                       className="bg-secondary border-border"
                     />
+                    {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -66,11 +104,10 @@ export default function KontakPage() {
                       id="email"
                       type="email"
                       placeholder="contoh@email.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      required
+                      {...register("email")}
                       className="bg-secondary border-border"
                     />
+                    {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -79,11 +116,10 @@ export default function KontakPage() {
                       id="phone"
                       type="tel"
                       placeholder="Masukkan nomor handphone Anda"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      required
+                      {...register("phone")}
                       className="bg-secondary border-border"
                     />
+                    {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -91,15 +127,21 @@ export default function KontakPage() {
                     <Textarea
                       id="message"
                       placeholder="Tuliskan pesan Anda di sini..."
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      required
+                      {...register("message")}
                       className="min-h-32 bg-secondary border-border"
                     />
+                    {errors.message && <p className="text-sm text-destructive">{errors.message.message}</p>}
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full">
-                    Kirim Pesan
+                  <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Mengirim...
+                      </>
+                    ) : (
+                      "Kirim Pesan"
+                    )}
                   </Button>
                 </form>
               </CardContent>
