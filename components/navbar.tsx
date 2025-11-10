@@ -2,13 +2,12 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Search, Menu, X } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { SearchCommand } from "@/components/search-command"
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
 
   const menuItems = [
     { label: "Beranda", href: "/" },
@@ -55,18 +54,8 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Search Bar */}
           <div className="hidden md:flex items-center gap-2 flex-1 max-w-sm ml-8">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Cari layanan..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-secondary border-border"
-              />
-            </div>
+            <SearchCommand />
           </div>
 
           {/* Mobile Menu Button */}
@@ -89,15 +78,8 @@ export function Navbar() {
                   {item.label}
                 </Link>
               ))}
-              <div className="relative mt-2 px-2">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Cari layanan..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-secondary border-border"
-                />
+              <div className="px-2 mt-2">
+                <SearchCommand />
               </div>
             </div>
           </div>
