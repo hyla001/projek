@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
+import { useScrollReveal } from "@/hooks/use-scroll-reveal"
 
 interface Testimonial {
   id: string
@@ -74,6 +75,8 @@ export function TestimonialSection() {
   const [hoverRating, setHoverRating] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const { toast } = useToast()
+
+  const sectionRef = useScrollReveal()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -152,10 +155,20 @@ export function TestimonialSection() {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-foreground">Apa Kata Pelanggan Kami</h2>
+        <h2
+          ref={sectionRef.ref}
+          className={`text-3xl md:text-4xl font-bold text-center mb-4 text-foreground transition-all duration-700 ${
+            sectionRef.isVisible ? "animate-fade-in-up" : "opacity-0"
+          }`}
+        >
+          Apa Kata Pelanggan Kami
+        </h2>
 
-        {/* Form Input */}
-        <div className="max-w-2xl mx-auto mb-16 bg-card p-6 sm:p-8 rounded-2xl border border-border">
+        <div
+          className={`max-w-2xl mx-auto mb-16 bg-card p-6 sm:p-8 rounded-2xl border border-border hover-lift smooth-transition ${
+            sectionRef.isVisible ? "animate-scale-in" : "opacity-0"
+          }`}
+        >
           <form onSubmit={handleSubmit}>
             <div className="mb-6">
               <label className="block text-foreground mb-2 font-semibold">Nama Anda</label>
@@ -164,7 +177,7 @@ export function TestimonialSection() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Masukkan nama Anda"
-                className="bg-secondary border-border"
+                className="bg-secondary border-border smooth-transition"
                 required
               />
             </div>
@@ -182,7 +195,7 @@ export function TestimonialSection() {
                 placeholder="Ceritakan pengalaman Anda dengan layanan kami..."
                 rows={4}
                 maxLength={500}
-                className="bg-secondary border-border resize-none"
+                className="bg-secondary border-border resize-none smooth-transition"
                 required
               />
               <div className="text-right text-muted-foreground text-sm mt-1">{formData.comment.length}/500</div>
@@ -191,7 +204,7 @@ export function TestimonialSection() {
             <Button
               type="submit"
               disabled={submitting}
-              className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+              className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover-lift"
               size="lg"
             >
               {submitting ? (
@@ -212,24 +225,25 @@ export function TestimonialSection() {
         {/* Display Comments */}
         {testimonials.length === 0 ? (
           <div className="text-center text-muted-foreground py-16">
-            <Star className="w-16 h-16 mx-auto mb-4 text-gray-600" />
+            <Star className="w-16 h-16 mx-auto mb-4 text-gray-600 animate-float" />
             <p className="text-lg">Belum ada ulasan</p>
             <p className="text-sm mt-2">Jadilah yang pertama memberikan testimoni!</p>
           </div>
         ) : testimonials.length < 10 ? (
-          // Grid layout untuk < 10 comments
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.map((testimonial) => (
+            {testimonials.map((testimonial, idx) => (
               <Card
                 key={testimonial.id}
-                className="bg-card border-border hover:scale-105 hover:shadow-2xl transition-all duration-300"
+                className={`bg-card border-border hover-lift smooth-transition ${
+                  sectionRef.isVisible ? `animate-fade-in-up stagger-${(idx % 6) + 1}` : "opacity-0"
+                }`}
               >
                 <CardContent className="p-6">
                   <div className="flex gap-1 mb-3">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-5 h-5 ${
+                        className={`w-5 h-5 smooth-transition ${
                           i < testimonial.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-600"
                         }`}
                       />
@@ -245,26 +259,34 @@ export function TestimonialSection() {
             ))}
           </div>
         ) : (
-          // Vertical auto-scroll untuk >= 10 comments
           <div className="relative h-[600px] overflow-hidden">
-            {/* Gradient overlays */}
-            <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
+            {/* Enhanced gradient overlays */}
+            <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background via-background/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background via-background/80 to-transparent z-10 pointer-events-none" />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
               {[0, 1, 2].map((colIndex) => (
-                <div key={colIndex} className="animate-scroll-vertical space-y-6">
+                <div
+                  key={colIndex}
+                  className={`space-y-6 ${
+                    colIndex === 0
+                      ? "animate-scroll-vertical-slow"
+                      : colIndex === 1
+                        ? "animate-scroll-vertical"
+                        : "animate-scroll-vertical-fast"
+                  }`}
+                >
                   {duplicatedTestimonials.map((testimonial, index) => (
                     <Card
                       key={`${colIndex}-${index}`}
-                      className="bg-card border-border hover:scale-105 transition-transform cursor-pointer"
+                      className="bg-card border-border hover-lift smooth-transition cursor-pointer"
                     >
                       <CardContent className="p-6">
                         <div className="flex gap-1 mb-3">
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`w-5 h-5 ${
+                              className={`w-5 h-5 smooth-transition ${
                                 i < testimonial.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-600"
                               }`}
                             />
