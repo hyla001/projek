@@ -472,9 +472,79 @@ export const articles = [
   },
 ]
 
+// ========== PRICING DATA ==========
+export interface PricingItem {
+  no: number
+  service: string
+  price: string
+  warranty: string
+}
+
 const priceList = {
-  hp: [], // Placeholder for HP pricing
-  laptop: [], // Placeholder for Laptop pricing
+  hp: [
+    {
+      no: 1,
+      service: "Ganti LCD/Touchscreen",
+      price: "Rp 150.000 - Rp 800.000",
+      warranty: "1 Minggu"
+    },
+    {
+      no: 2,
+      service: "Ganti Baterai",
+      price: "Rp 100.000 - Rp 400.000",
+      warranty: "1 Minggu"
+    },
+    {
+      no: 3,
+      service: "Service Mati Total",
+      price: "Rp 100.000 - Rp 500.000",
+      warranty: "1 Minggu"
+    },
+    {
+      no: 4,
+      service: "Perbaikan Charging/Port USB",
+      price: "Rp 75.000 - Rp 300.000",
+      warranty: "1 Minggu"
+    },
+    {
+      no: 5,
+      service: "Software/Install Ulang",
+      price: "Rp 50.000 - Rp 150.000",
+      warranty: "1 Minggu"
+    }
+  ],
+  laptop: [
+    {
+      no: 1,
+      service: "Install Ulang Windows + Driver",
+      price: "Rp 100.000 - Rp 200.000",
+      warranty: "1 Minggu"
+    },
+    {
+      no: 2,
+      service: "Upgrade RAM/SSD",
+      price: "Rp 50.000 - Rp 150.000",
+      warranty: "1 Minggu"
+    },
+    {
+      no: 3,
+      service: "Perbaikan Keyboard/Touchpad",
+      price: "Rp 100.000 - Rp 400.000",
+      warranty: "1 Minggu"
+    },
+    {
+      no: 4,
+      service: "Service Overheat/Cleaning",
+      price: "Rp 75.000 - Rp 200.000",
+      warranty: "1 Minggu"
+    },
+    {
+      no: 5,
+      service: "Ganti LCD/Layar Laptop",
+      price: "Rp 500.000 - Rp 2.000.000",
+      warranty: "1 Minggu"
+    }
+  ]
 }
 
 // Export aliases for backward compatibility

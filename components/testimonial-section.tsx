@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Star, Send, Loader2 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -19,8 +19,47 @@ interface Testimonial {
   date: string
 }
 
-// Mock data - dalam production ini akan fetch dari database
-const mockTestimonials: Testimonial[] = [
+// 🔒 SANITIZE INPUT: Hapus karakter berbahaya
+const sanitizeInput = (input: string): string => {
+  return input
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;")
+    .replace(/\//g, "&#x2F;")
+    .trim()
+}
+
+// 🔒 VALIDATE INPUT: Cek format dan panjang
+const validateInput = (name: string, comment: string): { valid: boolean; error?: string } => {
+  // Nama: 2-50 karakter, hanya huruf dan spasi
+  if (name.length < 2 || name.length > 50) {
+    return { valid: false, error: "Nama harus 2-50 karakter" }
+  }
+  
+  if (!/^[a-zA-Z\s]+$/.test(name)) {
+    return { valid: false, error: "Nama hanya boleh huruf dan spasi" }
+  }
+
+  // Comment: 5-500 karakter
+  if (comment.length < 5 || comment.length > 500) {
+    return { valid: false, error: "Komentar harus 5-500 karakter" }
+  }
+
+  // Cek kata-kata terlarang/spam
+  const forbiddenWords = ['script', 'onclick', 'onerror', 'javascript:', 'alert(']
+  const lowerComment = comment.toLowerCase()
+  for (const word of forbiddenWords) {
+    if (lowerComment.includes(word)) {
+      return { valid: false, error: "Komentar mengandung kata terlarang" }
+    }
+  }
+
+  return { valid: true }
+}
+
+// Mock data awal
+const initialTestimonials: Testimonial[] = [
   {
     id: "1",
     name: "Andi Pratama",
@@ -32,7 +71,7 @@ const mockTestimonials: Testimonial[] = [
     id: "2",
     name: "Budi Santoso",
     rating: 5,
-    comment: "Luar biasa! Kerusakan AC cepat diatasi dengan harga yang sangat terjangkau. Kuis puas juga!",
+    comment: "Luar biasa! Kerusakan AC cepat diatasi dengan harga yang sangat terjangkau. Sangat puas!",
     date: "2 Maret 2024",
   },
   {
@@ -46,27 +85,27 @@ const mockTestimonials: Testimonial[] = [
     id: "4",
     name: "Dewi Anjani",
     rating: 5,
-    comment: "Sangat puas dengan pelayanan selesai cepat! Komputer saya sekarang berjalan lebih lancar. Terimakasih!",
+    comment: "Sangat puas dengan pelayanan! Komputer saya sekarang berjalan lebih lancar. Terimakasih!",
     date: "18 Maret 2024",
   },
   {
     id: "5",
     name: "Fajar Nugroho",
     rating: 5,
-    comment: "Service HP berkualitas tinggi! Perbaikan cepat dan dijelaskan dengan detail. Sangat merekomendasikan!",
+    comment: "Service HP berkualitas tinggi! Perbaikan cepat dan dijelaskan dengan detail. Sangat recommended!",
     date: "5 Maret 2024",
   },
   {
     id: "6",
     name: "Rian Syahputra",
     rating: 5,
-    comment: "Proses perbaikan AC cepat dan efisien! Staff sangat membantu menjelaskan kerusakan. Puas banget!",
+    comment: "Proses perbaikan TV cepat dan efisien! Staff sangat membantu menjelaskan kerusakan. Puas banget!",
     date: "10 Maret 2024",
   },
 ]
 
 export function TestimonialSection() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(mockTestimonials)
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
   const [formData, setFormData] = useState({
     name: "",
     rating: 5,
@@ -78,22 +117,52 @@ export function TestimonialSection() {
 
   const sectionRef = useScrollReveal()
 
+  // Load testimonials dari localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedTestimonials = localStorage.getItem('testimonials')
+      if (savedTestimonials) {
+        try {
+          const parsed = JSON.parse(savedTestimonials)
+          // 🔒 Sanitize data dari localStorage (case user edit manual)
+          const sanitized = parsed.map((t: Testimonial) => ({
+            ...t,
+            name: sanitizeInput(t.name),
+            comment: sanitizeInput(t.comment)
+          }))
+          setTestimonials(sanitized)
+        } catch (error) {
+          console.error('Error parsing testimonials:', error)
+          setTestimonials(initialTestimonials)
+          localStorage.setItem('testimonials', JSON.stringify(initialTestimonials))
+        }
+      } else {
+        setTestimonials(initialTestimonials)
+        localStorage.setItem('testimonials', JSON.stringify(initialTestimonials))
+      }
+    }
+  }, [])
+
+  // Save testimonials ke localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined' && testimonials.length > 0) {
+      localStorage.setItem('testimonials', JSON.stringify(testimonials))
+    }
+  }, [testimonials])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!formData.name || !formData.comment) {
-      toast({
-        title: "Error",
-        description: "Mohon isi semua field!",
-        variant: "destructive",
-      })
-      return
-    }
+    // 🔒 Sanitize input
+    const sanitizedName = sanitizeInput(formData.name)
+    const sanitizedComment = sanitizeInput(formData.comment)
 
-    if (formData.comment.length < 10) {
+    // 🔒 Validate input
+    const validation = validateInput(sanitizedName, sanitizedComment)
+    if (!validation.valid) {
       toast({
         title: "Error",
-        description: "Komentar minimal 10 karakter!",
+        description: validation.error,
         variant: "destructive",
       })
       return
@@ -101,13 +170,13 @@ export function TestimonialSection() {
 
     setSubmitting(true)
 
-    // Simulasi API call - dalam production ini akan save ke database
+    // Simulasi API call
     setTimeout(() => {
       const newTestimonial: Testimonial = {
         id: Date.now().toString(),
-        name: formData.name,
+        name: sanitizedName,
         rating: formData.rating,
-        comment: formData.comment,
+        comment: sanitizedComment,
         date: new Date().toLocaleDateString("id-ID", {
           day: "numeric",
           month: "long",
@@ -115,13 +184,16 @@ export function TestimonialSection() {
         }),
       }
 
-      setTestimonials([newTestimonial, ...testimonials])
+      const updatedTestimonials = [newTestimonial, ...testimonials]
+      setTestimonials(updatedTestimonials)
+      
+      // Reset form
       setFormData({ name: "", rating: 5, comment: "" })
       setSubmitting(false)
 
       toast({
         title: "Terima kasih!",
-        description: "Ulasan Anda berhasil dikirim.",
+        description: "Ulasan Anda berhasil dikirim!",
       })
     }, 1500)
   }
@@ -149,7 +221,6 @@ export function TestimonialSection() {
     )
   }
 
-  // Duplicate testimonials for seamless infinite scroll
   const duplicatedTestimonials = [...testimonials, ...testimonials]
 
   return (
@@ -178,8 +249,10 @@ export function TestimonialSection() {
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Masukkan nama Anda"
                 className="bg-secondary border-border smooth-transition"
+                maxLength={50}
                 required
               />
+              <p className="text-xs text-muted-foreground mt-1">Hanya huruf dan spasi (2-50 karakter)</p>
             </div>
 
             <div className="mb-6">
@@ -198,7 +271,9 @@ export function TestimonialSection() {
                 className="bg-secondary border-border resize-none smooth-transition"
                 required
               />
-              <div className="text-right text-muted-foreground text-sm mt-1">{formData.comment.length}/500</div>
+              <div className="text-right text-muted-foreground text-sm mt-1">
+                {formData.comment.length}/500 karakter
+              </div>
             </div>
 
             <Button
@@ -260,7 +335,6 @@ export function TestimonialSection() {
           </div>
         ) : (
           <div className="relative h-[600px] overflow-hidden">
-            {/* Enhanced gradient overlays */}
             <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background via-background/80 to-transparent z-10 pointer-events-none" />
             <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background via-background/80 to-transparent z-10 pointer-events-none" />
 

@@ -10,12 +10,40 @@ export const metadata = {
 }
 
 export default function TokoKamiPage() {
+  // Data gallery dengan gambar yang berbeda-beda
+  const galleryImages = [
+    {
+      id: 1,
+      src: "/images/konter2.jpg",
+      alt: "Interior Toko MULTIDATA Elektronik",
+      title: "GALLERY 1"
+    },
+    {
+      id: 2, 
+      src: "/images/konter.jpg",
+      alt: "Display Produk Elektronik",
+      title: "GALLERY 2"
+    },
+    {
+      id: 3,
+      src: "/images/iconutama.svg",
+      alt: "Area Service & Perbaikan", 
+      title: "~~"
+    },
+    {
+      id: 4,
+      src: "/images/iconutama.svg",
+      alt: "Teknisi Berpengalaman",
+      title: "~~"
+    }
+  ]
+
   return (
     <div className="min-h-screen">
       {/* Hero Section with Store Image */}
-      <section className="relative h-[400px] overflow-hidden">
+      <section className="relative h-[600px] overflow-hidden">
         <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screenNN-TL85CnUxaFiqFOH5HCXWRZpH9HuVqk.png"
+          src="/images/mg.png"
           alt="MULTIDATA Elektronik Store"
           width={1200}
           height={400}
@@ -96,16 +124,19 @@ export default function TokoKamiPage() {
         {/* Gallery Section */}
         <div>
           <h2 className="text-3xl font-bold text-center mb-8">Galeri Toko</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {storeGallery.map((item, index) => (
-              <div key={index} className="aspect-square rounded-lg overflow-hidden border border-border group">
-                <Image
-                  src={`/.jpg?key=kr3c7&height=400&width=400&query=${item.alt}`}
-                  alt={item.alt}
-                  width={400}
-                  height={400}
-                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-300"
-                />
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {galleryImages.map((image) => (
+              <div key={image.id} className="text-center space-y-4">
+                <div className="aspect-square rounded-lg overflow-hidden shadow-lg border border-border hover:shadow-xl transition-shadow group">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    width={400}
+                    height={400}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <h3 className="font-semibold text-lg">{image.title}</h3>
               </div>
             ))}
           </div>
